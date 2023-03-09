@@ -46,7 +46,7 @@ const Map = () => {
                 <Icon
                     type="antdesign"
                     name="home"
-                    color="black"
+                    color="red"
                     size={16}
                     // style={}
                 />

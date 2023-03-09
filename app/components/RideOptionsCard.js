@@ -10,21 +10,9 @@ import { selectDestination, selectOrigin, selectTravelTimeInformation } from '..
 const data = [
     {
         id: "Uber-X-123",
-        title: "Uber X",
+        title: "CAR",
         multiplier: 1,
         image: "https://links.papareact.com/3pn"
-    },
-    {
-        id: "Uber-XL-456",
-        title: "Uber XL",
-        multiplier: 1.2,
-        image: "https://links.papareact.com/5w8"
-    },
-    {
-        id: "Uber-LUX-123",
-        title: "Uber LUX",
-        multiplier: 1.75,
-        image: "https://links.papareact.com/7pf"
     },
 ]
 
@@ -41,13 +29,11 @@ const RideOptionsCard = () => {
         if(!origin || !destination) navigation.push('NavigateCard')
     }, [origin, destination])
 
-    const travelConst = (item) => {
-        return ((travelTimeInformation?.duration?.value * SEARCH_CHARGE_RATE * item?.multiplier) / 100).toFixed(2)
-    }
+    
 
     const onChoose = () =>{
         if(!selected) return Alert.alert('Please select a ride option')
-        navigation.push('SuccessScreen', { data: {...selected, distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text, price: travelConst(selected)} })
+        navigation.push('SuccessScreen', { data: {...selected, distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text} })
     }
 
     return (
@@ -65,7 +51,7 @@ const RideOptionsCard = () => {
                         style={tailwind`p-3`}
                     />
                 </TouchableOpacity>
-                <Text style={tailwind`text-center text-xl font-bold`}>Select a ride - {travelTimeInformation?.distance?.text}</Text>
+                <Text style={tailwind`text-center text-xl font-bold`}>DISTANCE - {travelTimeInformation?.distance?.text}</Text>
             </View>
             <View style={tailwind`flex-1 mt-2`}>
                 <FlatList
@@ -85,15 +71,6 @@ const RideOptionsCard = () => {
                                     <Text style={tailwind`text-xl font-bold text-black`}>{item.title}</Text>
                                     <Text style={tailwind`text-gray-600`}>{travelTimeInformation?.duration?.text} Travel time</Text>
                                 </View>
-                                <Text style={tailwind`text-gray-800 text-lg`}>
-                                    {/* {new Intl.NumberFormat('en-us', {
-                                        style: 'currency',
-                                        currency: 'USD'
-                                    }).format(
-                                        travelConst(item)
-                                    )} */}
-                                    ${travelConst(item)}
-                                </Text>
                             </View>
                         </TouchableOpacity>
                     )}
@@ -105,7 +82,7 @@ const RideOptionsCard = () => {
                     disabled={!selected}
                     onPress={onChoose}
                 >
-                    <Text style={tailwind`text-center text-white text-xl`}>Choose {selected?.title}</Text>
+                    <Text style={tailwind`text-center text-white text-xl`}>START </Text>
                 </TouchableOpacity>
             </View>
         </Screen>

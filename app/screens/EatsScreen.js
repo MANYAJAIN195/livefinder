@@ -25,7 +25,7 @@ const EatsScreen = () => {
                 />
             </TouchableOpacity>
             <View style={tailwind`items-center`}>
-                <Text>Uber Eats</Text>
+                <Text>Railway Tracking</Text>
                 <Text>Coming soon!</Text>
             </View>
         </Screen>

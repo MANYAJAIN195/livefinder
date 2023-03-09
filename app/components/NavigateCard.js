@@ -4,13 +4,10 @@ import tailwind from 'tailwind-react-native-classnames'
 import Screen from './Screen'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import {GOOGLE_MAP_APIKEY} from "@env";
-import { setDestination } from '../redux/slices/navSlice'
+import { setDestination, setOrigin } from '../redux/slices/navSlice'
 import { useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
-import NavFavourites from './NavFavourites'
 import { Icon } from 'react-native-elements'
-
-//const GOOGLE_MAP_APIKEY = "2u1CjhPYLruCeYefnB8YOQdsvaipD5k4"
 
 const NavigateCard = () => {
     const dispatch = useDispatch()
@@ -18,7 +15,7 @@ const NavigateCard = () => {
 
     return (
         <Screen style={tailwind`bg-white flex-1`}>
-            <Text style={tailwind`text-center pb-5 text-xl font-bold`}>Good morning, Khalid</Text>
+            <Text style={tailwind`text-center pb-5 text-xl font-bold`}>Welcome</Text>
             <View style={tailwind`border-t border-gray-100 flex-shrink relative z-20 bg-white`}>
                 <View style={tailwind`bg-white pb-2`}>
                     <GooglePlacesAutocomplete
@@ -45,14 +42,8 @@ const NavigateCard = () => {
                 </View>
             </View>
             <View style={tailwind`px-3 bg-white relative z-10 justify-between flex-1`}>
-                <NavFavourites />
+                
                 <View style={tailwind`mt-3 flex-row justify-evenly py-3 border-t border-gray-100`}>
-                    <TouchableOpacity
-                        style={tailwind`flex-row bg-white w-24 px-4 py-3 rounded-full border border-black`}
-                    >
-                        <Icon name="fast-food-outline" type="ionicon" color="black" size={16} />
-                        <Text style={tailwind`text-black text-center pl-3`}>Food</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity
                         style={tailwind`flex-row bg-black w-24 px-4 py-3 rounded-full border border-black`}
                         onPress={() => navigation.push('RideOptionsCard')}

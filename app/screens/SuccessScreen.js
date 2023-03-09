@@ -32,10 +32,9 @@ const SuccessScreen = ({ route }) => {
                     />
                 </View>
                 <View style={tw`p-5 text-center self-center`}>
-                    <Text style={tw`font-bold text-lg mb-3 text-center`}>Your {data?.title} is on the way</Text>
-                    <Text style={tw`text-base text-center`}>Ride cost: ${data?.price}</Text>
-                    <Text style={tw`text-base text-center`}>Estimated time: ${data?.time}</Text>
-                    <Text style={tw`text-base text-center`}>Estimated distance: ${data?.distance}</Text>
+                    <Text style={tw`font-bold text-lg mb-3 text-center`}>LET'S START</Text>
+                    <Text style={tw`text-base text-center`}>Estimated time: {data?.time}</Text>
+                    <Text style={tw`text-base text-center`}>Estimated distance: {data?.distance}</Text>
                 </View>
             </View>
         </Screen>

@@ -7,9 +7,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import {GOOGLE_MAP_APIKEY} from "@env";
 import { useDispatch } from 'react-redux';
 import { setDestination, setOrigin } from '../redux/slices/navSlice';
-import NavFavourites from '../components/NavFavourites';
 
-//const GOOGLE_MAP_APIKEY = "2u1CjhPYLruCeYefnB8YOQdsvaipD5k4"
 
 const HomeScreen = () => {
     const dispatch = useDispatch()
@@ -17,13 +15,13 @@ const HomeScreen = () => {
     return (
         <Screen style={tw`bg-white h-full`}>
             <View style={tw`p-5`}>
-                <Image
-                    source={{ uri: 'https://links.papareact.com/gzs' }}
+            <Image
+                    source={require('../assets/livefinder.png') }
                     style={styles.logo}
                 />
-                <View style={tw`mb-3`}>
+            <View style={tw`mb-5`}>
                     <GooglePlacesAutocomplete
-                        placeholder='Where from?'
+                        placeholder='Your Location?'
                         nearbyPlacesAPI="GooglePlacesSearch"
                         debounce={400}
                         onPress={(data, details = null) => {
@@ -44,27 +42,33 @@ const HomeScreen = () => {
                         styles={{
                             container: {
                                 flex: 0,
+                                
                             },
                             textInput: {
-                                fontSize: 15
+                                fontSize: 20,
+                                backgroundColor: 'lightblue',
+                                color: 'black'
                             }
                         }}
                         enablePoweredByContainer={false}
                     />
                 </View>
+                
+                
                 <NavOptions />
-                <NavFavourites />
             </View>
         </Screen>
     );
 }
 
 const styles = StyleSheet.create({
+    
     logo: {
-        height: 50,
-        width: 100,
+        height: 300,
+        width: 300,
         resizeMode: 'contain',
-        marginBottom: 20
+        marginBottom: 20,
+        alignSelf: 'center'
     }
 })
 

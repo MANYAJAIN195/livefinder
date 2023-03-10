@@ -1,15 +1,36 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Screen from '../components/Screen';
 import tw from 'tailwind-react-native-classnames';
 import Constants from 'expo-constants'
 import tailwind from 'tailwind-react-native-classnames'
 import { Icon } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
+import * as Notifications from 'expo-notifications';
 
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true
+    })
+  });
 const SuccessScreen = ({ route }) => {
     const { data } = route.params;
     const navigation = useNavigation()
+    const onClick = async () => {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "livefinder",
+            body: "Time to leave",
+            data: { data: "data goes here" }
+          },
+          trigger: {
+            seconds: 1
+          }
+        });
+      }
 
     return (
         <Screen style={tw`bg-white h-full justify-center`}>
@@ -35,6 +56,12 @@ const SuccessScreen = ({ route }) => {
                     <Text style={tw`font-bold text-lg mb-3 text-center`}>LET'S START</Text>
                     <Text style={tw`text-base text-center`}>Estimated time: {data?.time}</Text>
                     <Text style={tw`text-base text-center`}>Estimated distance: {data?.distance}</Text>
+                    <View style={styles.container}>
+                        <TouchableOpacity onPress={onClick}>
+                            <Text style={{backgroundColor: 'black', padding: 10, color: 'white'}}>Click to notify</Text>
+                        </TouchableOpacity>
+                        <StatusBar style="auto" />
+                    </View>
                 </View>
             </View>
         </Screen>
@@ -42,3 +69,11 @@ const SuccessScreen = ({ route }) => {
 }
 
 export default SuccessScreen;
+const styles = StyleSheet.create({
+    container: {
+      flex: 0.5,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });

@@ -7,11 +7,13 @@ import {GOOGLE_MAP_APIKEY} from "@env";
 import { setDestination, setOrigin } from '../redux/slices/navSlice'
 import { useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
-import { Icon } from 'react-native-elements'
+
 
 const NavigateCard = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
+    
+     
 
     return (
         <Screen style={tailwind`bg-white flex-1`}>
@@ -39,8 +41,11 @@ const NavigateCard = () => {
                         styles={toInputBoxStyles}
                         enablePoweredByContainer={false}
                     />
+                    
                 </View>
             </View>
+          
+           
             <View style={tailwind`px-3 bg-white relative z-10 justify-between flex-1`}>
                 
                 <View style={tailwind`mt-3 flex-row justify-evenly py-3 border-t border-gray-100`}>
@@ -48,8 +53,8 @@ const NavigateCard = () => {
                         style={tailwind`flex-row bg-black w-24 px-4 py-3 rounded-full border border-black`}
                         onPress={() => navigation.push('RideOptionsCard')}
                     >
-                        <Icon name="car" type="font-awesome" color="white" size={16} />
-                        <Text style={tailwind`text-white text-center pl-3`}>Ride</Text>
+                        
+                        <Text style={tailwind`text-white text-center`}>Select Date and Time</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -77,3 +82,11 @@ const toInputBoxStyles = StyleSheet.create({
         paddingBottom: 0
     }
 })
+const styles = StyleSheet.create({
+    container: {
+       flex: 1,
+       alignItems: "center",
+       justifyContent: "center"
+    },
+    
+ });

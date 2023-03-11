@@ -1,26 +1,41 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View, Alert, Platform } from 'react-native'
 import tailwind from 'tailwind-react-native-classnames'
 import { Icon } from 'react-native-elements'
 import Screen from './Screen'
 import { useSelector } from 'react-redux'
 import { selectDestination, selectOrigin, selectTravelTimeInformation } from '../redux/slices/navSlice'
+import { Button } from 'react-native-elements'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-const data = [
-    {
-        id: "Uber-X-123",
-        title: "CAR",
-        multiplier: 1,
-        image: "https://links.papareact.com/3pn"
-    },
-]
-
-const SEARCH_CHARGE_RATE = 1.5
 
 const RideOptionsCard = () => {
+
+    const [date, setDate] = useState(new Date());
+    const [mode,setMode]=useState('date');
+    const [show,setShow]=useState(false);
+    const [text,setText]=useState('Empty');
+
+    const onChange=(event,selectedDate)=>{
+        const currentDate=selectedDate||date;
+        setShow(false);
+        setDate(currentDate);
+
+        let tempDate=new Date(currentDate);
+        let fDate=tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
+        let fTime='Hours: '+tempDate.getHours()+' | Minutes: '+tempDate.getMinutes();
+        setText(fDate+'\n'+fTime)
+    }
+    const showMode=(currentMode)=>{
+        setShow(true);
+        setMode(currentMode);
+    }
+  
+
+
+
     const navigation = useNavigation()
-    const [selected, setSelected] = useState(null)
     const travelTimeInformation = useSelector(selectTravelTimeInformation)
     const origin = useSelector(selectOrigin)
     const destination = useSelector(selectDestination)
@@ -31,10 +46,9 @@ const RideOptionsCard = () => {
 
     
 
-    const onChoose = () =>{
-        if(!selected) return Alert.alert('Please select a ride option')
-        navigation.push('SuccessScreen', { data: {...selected, distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text} })
-    }
+    // const onChoose = () =>{
+    //     navigation.push('SuccessScreen', { data: {distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text,date:currentDate} })
+    // }
 
     return (
         <Screen style={tailwind`bg-white h-full`}>
@@ -51,36 +65,38 @@ const RideOptionsCard = () => {
                         style={tailwind`p-3`}
                     />
                 </TouchableOpacity>
-                <Text style={tailwind`text-center text-xl font-bold`}>DISTANCE - {travelTimeInformation?.distance?.text}</Text>
             </View>
             <View style={tailwind`flex-1 mt-2`}>
-                <FlatList
-                    data={data}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            style={tailwind`flex-row items-center justify-between px-5 ${selected?.id === item.id && 'bg-gray-100'}`}
-                            onPress={() => setSelected(item)}
-                        >
-                            <Image
-                                source={{ uri: item.image }}
-                                style={styles.image}
-                            />
-                            <View style={tailwind`flex-row items-center justify-between flex-1`}>
-                                <View>
-                                    <Text style={tailwind`text-xl font-bold text-black`}>{item.title}</Text>
-                                    <Text style={tailwind`text-gray-600`}>{travelTimeInformation?.duration?.text} Travel time</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
+                <Text style={tailwind`text-gray-600`}>DISTANCE - {travelTimeInformation?.distance?.text}</Text>
+                <Text style={tailwind`text-gray-600`}>{travelTimeInformation?.duration?.text} Travel time</Text>  
+            </View>
+            <View style={styles.container}>
+                <Text>{text}</Text>
+                <View style={{margin:20}}>
+                    <Button title="Show date picker!"  onPress={()=>showMode('date')}/>
+                </View>
+                <View style={{margin:20}}>
+                    <Button title="Show Time picker!"  onPress={()=>showMode('time')}/>
+                </View>
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        display='default'
+                        onChange={onChange}
+                    />
+                    
+                )}
+               
             </View>
             <View>
                 <TouchableOpacity
-                    style={tailwind`bg-black py-3 m-3 rounded-lg ${!selected && 'bg-gray-300'}`}
-                    disabled={!selected}
-                    onPress={onChoose}
+                    style={tailwind`bg-black py-3 m-3 rounded-lg`}
+                    onPress={()=>{
+                        navigation.push('SuccessScreen', { data: {distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text,date:date.getMinutes()} })
+                    }}
                 >
                     <Text style={tailwind`text-center text-white text-xl`}>START </Text>
                 </TouchableOpacity>

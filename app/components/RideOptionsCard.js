@@ -15,7 +15,8 @@ const RideOptionsCard = () => {
     const [date, setDate] = useState(new Date());
     const [mode,setMode]=useState('date');
     const [show,setShow]=useState(false);
-    const [text,setText]=useState('Empty');
+    const [text,setText]=useState('');
+    const [hours,setHour]=useState('');
 
     const onChange=(event,selectedDate)=>{
         const currentDate=selectedDate||date;
@@ -25,6 +26,8 @@ const RideOptionsCard = () => {
         let tempDate=new Date(currentDate);
         let fDate=tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
         let fTime='Hours: '+tempDate.getHours()+' | Minutes: '+tempDate.getMinutes();
+        var hh = new Date();
+        setHour((tempDate-hh)/1000);
         setText(fDate+'\n'+fTime)
     }
     const showMode=(currentMode)=>{
@@ -32,7 +35,6 @@ const RideOptionsCard = () => {
         setMode(currentMode);
     }
   
-
 
 
     const navigation = useNavigation()
@@ -66,17 +68,13 @@ const RideOptionsCard = () => {
                     />
                 </TouchableOpacity>
             </View>
-            <View style={tailwind`flex-1 mt-2`}>
-                <Text style={tailwind`text-gray-600`}>DISTANCE - {travelTimeInformation?.distance?.text}</Text>
-                <Text style={tailwind`text-gray-600`}>{travelTimeInformation?.duration?.text} Travel time</Text>  
-            </View>
             <View style={styles.container}>
-                <Text>{text}</Text>
-                <View style={{margin:20}}>
-                    <Button title="Show date picker!"  onPress={()=>showMode('date')}/>
+                <View style={{margin:10}}>
+                    <Text>{text}</Text>
+                    <Button title="Select Date"  onPress={()=>showMode('date')}/>
                 </View>
-                <View style={{margin:20}}>
-                    <Button title="Show Time picker!"  onPress={()=>showMode('time')}/>
+                <View style={{margin:10}}>
+                    <Button title="Select Time"  onPress={()=>showMode('time')}/>
                 </View>
                 {show && (
                     <DateTimePicker
@@ -86,19 +84,19 @@ const RideOptionsCard = () => {
                         is24Hour={true}
                         display='default'
                         onChange={onChange}
-                    />
-                    
+                    />    
                 )}
                
             </View>
+            
             <View>
                 <TouchableOpacity
                     style={tailwind`bg-black py-3 m-3 rounded-lg`}
                     onPress={()=>{
-                        navigation.push('SuccessScreen', { data: {distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text,date:date.getMinutes()} })
+                        navigation.push('SuccessScreen', { data: {distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text, hour: hours} })
                     }}
                 >
-                    <Text style={tailwind`text-center text-white text-xl`}>START </Text>
+                    <Text style={tailwind`text-center text-white text-xl`}>Procede </Text>
                 </TouchableOpacity>
             </View>
         </Screen>
@@ -109,8 +107,8 @@ export default RideOptionsCard
 
 const styles = StyleSheet.create({
     image: {
-        width: 100,
-        height: 100,
+        width: 50,
+        height: 50,
         resizeMode: 'contain'
     }
 })

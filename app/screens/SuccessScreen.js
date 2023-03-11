@@ -19,6 +19,7 @@ Notifications.setNotificationHandler({
 const SuccessScreen = ({ route }) => {
     const { data } = route.params;
     const navigation = useNavigation()
+    const h=data.hour
     const onClick = async () => {
         await Notifications.scheduleNotificationAsync({
           content: {
@@ -27,7 +28,7 @@ const SuccessScreen = ({ route }) => {
             data: { data: "data goes here" }
           },
           trigger: {
-            seconds: 1
+            seconds: h
           }
         });
       }
@@ -56,6 +57,7 @@ const SuccessScreen = ({ route }) => {
                     <Text style={tw`font-bold text-lg mb-3 text-center`}>LET'S START</Text>
                     <Text style={tw`text-base text-center`}>Estimated time: {data?.time}</Text>
                     <Text style={tw`text-base text-center`}>Estimated distance: {data?.distance}</Text>
+                    <Text style={tw`text-base text-center`}>seconds: {h}</Text>
                     <View style={styles.container}>
                         <TouchableOpacity onPress={onClick}>
                             <Text style={{backgroundColor: 'black', padding: 10, color: 'white'}}>Click to notify</Text>

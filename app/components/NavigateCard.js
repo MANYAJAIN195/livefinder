@@ -50,11 +50,11 @@ const NavigateCard = () => {
                 
                 <View style={tailwind`mt-3 flex-row justify-evenly py-3 border-t border-gray-100`}>
                     <TouchableOpacity
-                        style={tailwind`flex-row bg-black w-24 px-4 py-3 rounded-full border border-black`}
+                        style={tailwind`flex-row bg-black px-4 py-3 rounded-full border border-black`}
                         onPress={() => navigation.push('RideOptionsCard')}
                     >
                         
-                        <Text style={tailwind`text-white text-center`}>Select Date and Time</Text>
+                        <Text style={tailwind`text-white text-center`}>When do you want to reach?</Text>
                     </TouchableOpacity>
                 </View>
             </View>

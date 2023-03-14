@@ -96,7 +96,7 @@ const RideOptionsCard = () => {
                         navigation.push('SuccessScreen', { data: {distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text, hour: hours} })
                     }}
                 >
-                    <Text style={tailwind`text-center text-white text-xl`}>Procede </Text>
+                    <Text style={tailwind`text-center text-white text-xl`}>Proceed </Text>
                 </TouchableOpacity>
             </View>
         </Screen>

@@ -28,7 +28,7 @@ const SuccessScreen = ({ route }) => {
             data: { data: "data goes here" }
           },
           trigger: {
-            seconds: h
+            seconds: 1
           }
         });
       }

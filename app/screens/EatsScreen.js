@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet,Text, TouchableOpacity, View,TextInput } from 'react-native'
 import tw from 'tailwind-react-native-classnames'
 import Screen from '../components/Screen'
@@ -8,17 +8,16 @@ import { Icon } from 'react-native-elements'
 import tailwind from 'tailwind-react-native-classnames'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button } from 'react-native-elements'
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-import {GOOGLE_MAP_APIKEY} from "@env";
-import { setDestination, setOrigin } from '../redux/slices/navSlice'
 
 const EatsScreen = () => {
     const navigation = useNavigation()
     const [date, setDate] = useState(new Date());
+    const [dateN, setDateN] = useState('');
     const [mode,setMode]=useState('date');
     const [show,setShow]=useState(false);
     const [text,setText]=useState('');
-    const [text1, onChangeText] = React.useState('Train No.');
+    const [src, onChangesrc] = React.useState('');
+    const [dest, onChangedest] = React.useState('');
 
     const onChange=(event,selectedDate)=>{
         const currentDate=selectedDate||date;
@@ -28,8 +27,9 @@ const EatsScreen = () => {
         let tempDate=new Date(currentDate);
         let fDate=tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
         let fTime='Hours: '+tempDate.getHours()+' | Minutes: '+tempDate.getMinutes();
-        var hh = new Date();
-        setHour((tempDate-hh)/1000);
+        let fDaten=tempDate.getFullYear()+'-'+(tempDate.getMonth()+1)+'-'+tempDate.getDate();
+        //setText(tempDate)
+        setDateN(fDaten)
         setText(fDate+'\n'+fTime)
     }
     const showMode=(currentMode)=>{
@@ -53,34 +53,18 @@ const EatsScreen = () => {
             </TouchableOpacity>
             <Text style={tailwind`text-center pb-5 text-xl font-bold`}>Welcome</Text>
             <View style={tailwind`border-t border-gray-100 flex-shrink relative z-20 bg-white`}>
-                <View style={tailwind`bg-white pb-2`}>
-                    <GooglePlacesAutocomplete
-                        placeholder='Where to?'
-                        nearbyPlacesAPI="GooglePlacesSearch"
-                        debounce={400}
-                        onPress={(data, details = null) => {
-                            dispatch(setDestination({
-                                loaction: details.geometry.location,
-                                description: data.description
-                            }))
-                        }}
-                        minLength={2}
-                        fetchDetails={true}
-                        returnKeyType={"search"}
-                        onFail={error => console.error(error)}
-                        query={{
-                            key: GOOGLE_MAP_APIKEY,
-                            language: 'en',
-                        }}
-                        styles={toInputBoxStyles}
-                        enablePoweredByContainer={false}
-                    />
-                    
-                </View>
+                
                 <TextInput
                     style={styles1.input}
-                    onChangeText={onChangeText}
-                    value={text1}
+                    placeholder='Source Station Name'
+                    onChangeText={onChangesrc}
+                    value={src}
+                />
+                <TextInput
+                    style={styles1.input}
+                    placeholder='Destination Station Name'
+                    onChangeText={onChangedest}
+                    value={dest}
                 />
             </View>
                 
@@ -103,6 +87,15 @@ const EatsScreen = () => {
                     />    
                 )}
                
+            </View>
+            <View style={tailwind`mt-3 flex-row justify-evenly py-3 border-t border-gray-100`}>
+                    <TouchableOpacity
+                        style={tailwind`flex-row bg-black px-4 py-3 rounded-full border border-black`}
+                        onPress={() => navigation.push('Trainlist', { data: {source: src, destination: dest, date: dateN}})}
+                    >
+                        
+                        <Text style={tailwind`text-white text-center`}>Submit</Text>
+                    </TouchableOpacity>
             </View>
         </Screen>
     )
@@ -142,4 +135,6 @@ const styles1 = StyleSheet.create({
       padding: 10,
     },
   });
+
+
 

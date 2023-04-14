@@ -82,11 +82,3 @@ const toInputBoxStyles = StyleSheet.create({
         paddingBottom: 0
     }
 })
-const styles = StyleSheet.create({
-    container: {
-       flex: 1,
-       alignItems: "center",
-       justifyContent: "center"
-    },
-    
- });

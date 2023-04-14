@@ -65,14 +65,6 @@ const Map = () => {
             >
                 {!!origin && !!destination && (
                     <MapViewDirections
-                        // origin={{ 
-                        //     latitude: origin?.loaction.lat,
-                        //     longitude: origin?.loaction.lng,
-                        // }}
-                        // destination={{ 
-                        //     latitude: destination?.loaction.lat,
-                        //     longitude: destination?.loaction.lng,
-                        // }}
                         origin={origin.description}
                         destination={destination.description}
                         lineDashPattern={[0]}

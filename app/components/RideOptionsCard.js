@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View, Alert, Platform } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import tailwind from 'tailwind-react-native-classnames'
 import { Icon } from 'react-native-elements'
 import Screen from './Screen'
@@ -96,7 +96,7 @@ const RideOptionsCard = () => {
                         navigation.push('SuccessScreen', { data: {distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text, hour: hours} })
                     }}
                 >
-                    <Text style={tailwind`text-center text-white text-xl`}>Procede </Text>
+                    <Text style={tailwind`text-center text-white text-xl`}>Proceed </Text>
                 </TouchableOpacity>
             </View>
         </Screen>

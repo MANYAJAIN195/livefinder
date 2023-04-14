@@ -8,6 +8,8 @@ import { Icon } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import * as Notifications from 'expo-notifications';
+import { selectDestination, selectOrigin, selectTravelTimeInformation } from '../redux/slices/navSlice'
+import { useSelector } from 'react-redux'
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -20,6 +22,9 @@ const SuccessScreen = ({ route }) => {
     const { data } = route.params;
     const navigation = useNavigation()
     const h=data.hour
+    const travelTimeInformation = useSelector(selectTravelTimeInformation)
+    const d=(travelTimeInformation.duration.value)
+    const timetostart=((h-d)/3600)
     const onClick = async () => {
         await Notifications.scheduleNotificationAsync({
           content: {
@@ -28,7 +33,7 @@ const SuccessScreen = ({ route }) => {
             data: { data: "data goes here" }
           },
           trigger: {
-            seconds: 1
+            seconds:1
           }
         });
       }
@@ -57,7 +62,9 @@ const SuccessScreen = ({ route }) => {
                     <Text style={tw`font-bold text-lg mb-3 text-center`}>LET'S START</Text>
                     <Text style={tw`text-base text-center`}>Estimated time: {data?.time}</Text>
                     <Text style={tw`text-base text-center`}>Estimated distance: {data?.distance}</Text>
-                    <Text style={tw`text-base text-center`}>seconds: {h}</Text>
+                    {/* <Text style={tw`text-base text-center`}>seconds: {h}</Text> */}
+                    {/* <Text style={tw`text-base text-center`}>duration: {d}</Text> */}
+                    <Text style={tw`text-base text-center`}>time to start: {timetostart}</Text>
                     <View style={styles.container}>
                         <TouchableOpacity onPress={onClick}>
                             <Text style={{backgroundColor: 'black', padding: 10, color: 'white'}}>Click to notify</Text>

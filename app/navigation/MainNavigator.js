@@ -5,6 +5,7 @@ import MapScreen from '../screens/MapScreen';
 import EatsScreen from '../screens/EatsScreen';
 import SuccessScreen from '../screens/SuccessScreen';
 import Trainlist from '../screens/Trainlist';
+import TrainSuccess from '../screens/TrainSuccess';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ const MainNavigator = () => {
             <Stack.Screen name="MapScreen" component={MapScreen} />
             <Stack.Screen name="EatsScreen" component={EatsScreen} />
             <Stack.Screen name="Trainlist" component={Trainlist} />
+            <Stack.Screen name="TrainSuccess" component={TrainSuccess} />
             <Stack.Screen name="SuccessScreen" component={SuccessScreen} />
         </Stack.Navigator>
     );

@@ -27,7 +27,7 @@ const EatsScreen = () => {
         let tempDate=new Date(currentDate);
         let fDate=tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
         let fTime='Hours: '+tempDate.getHours()+' | Minutes: '+tempDate.getMinutes();
-        let fDaten=tempDate.getFullYear()+'-'+(tempDate.getMonth()+1)+'-'+tempDate.getDate();
+        let fDaten=tempDate.getFullYear()+'-0'+(tempDate.getMonth()+1)+'-'+tempDate.getDate();
         //setText(tempDate)
         setDateN(fDaten)
         setText(fDate+'\n'+fTime)

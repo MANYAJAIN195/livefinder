@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
 import Constants from 'expo-constants';
 import tailwind from 'tailwind-react-native-classnames';
-import tw from 'tailwind-react-native-classnames'
+import tw from 'tailwind-react-native-classnames';
+import * as Notifications from 'expo-notifications';
+import { StatusBar } from 'expo-status-bar';
 import { RAILWAY_APIKEY, RAILWAY_HOST_APIKEY } from "@env";
 import Screen from '../components/Screen';
 
 
-
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true
+  })
+});
 const TrainSuccess = ({ route }) => {
     const navigation = useNavigation()
     const {data} = route.params;
@@ -18,7 +26,18 @@ const TrainSuccess = ({ route }) => {
   const [timeToReach, setTimeToReach] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
 
-
+  const onClick = async () => {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "livefinder",
+          body: "Time to leave",
+          data: { data: "data goes here" }
+        },
+        trigger: {
+          seconds:1
+        }
+      });
+    }
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -84,9 +103,9 @@ useEffect(() => {
     if (timeToReach) {
       const { hoursDifference, minutesDifference } = getTimeDifference();
       return (
-        <Text>
-          Estimated arrival time at {destinationStation.station_name}: {timeToReach}{"\n"}
-          Estimated arrival time at {hoursDifference < 0 && minutesDifference < 0 ? 0 : hoursDifference} hours and {minutesDifference < 0 && hoursDifference < 0 ? 0 : minutesDifference} minutes
+        <Text style={tw`text-base text-center`}>
+          Estimated arrival time at {destinationStation.station_name}: {timeToReach} pm{"\n"}
+          After {hoursDifference < 0 && minutesDifference < 0 ? 0 : hoursDifference} hours and {minutesDifference < 0 && hoursDifference < 0 ? 0 : minutesDifference} minutes from current time //not required might remove later
 </Text>
       );
     }
@@ -109,13 +128,35 @@ useEffect(() => {
                 // style={}
                 />
             </TouchableOpacity>
-            <View style={tailwind`items-center`}>
-                <Text>selected train: {trainno}</Text>
+            <View style={tw`self-center`}>
+                <View style={tw`p-5 w-full `}>
+                    <Image
+                        source={require('../assets/car_animation.gif')}
+                        style={tw`w-60 h-40`}
+                    />
+            </View>
+            <View style={tw`p-5 text-center self-center`}>
+                    <Text style={tw`font-bold text-lg mb-3 text-center`}>selected train: {trainno}</Text>
                 {renderEstimatedArrivalTime()}
             </View>
+            <View style={styles.container}>
+                        <TouchableOpacity onPress={onClick}>
+                            <Text style={{backgroundColor: 'black', padding: 10, color: 'white'}}>Click to notify</Text>
+                        </TouchableOpacity>
+                        <StatusBar style="auto" />
+                    </View>
+                </View>
             
         </Screen>
     )
 }
 
 export default TrainSuccess
+const styles = StyleSheet.create({
+  container: {
+    flex: 0.5,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

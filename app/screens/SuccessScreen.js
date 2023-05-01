@@ -21,11 +21,42 @@ Notifications.setNotificationHandler({
 const SuccessScreen = ({ route }) => {
     const { data } = route.params;
     const navigation = useNavigation()
-    const h=data.hour
-    const travelTimeInformation = useSelector(selectTravelTimeInformation)
-    const d=(travelTimeInformation.duration.value)
-    const timetostart=((h-d)/3600)
+    const currentHour = new Date().getHours();
+    const currentMinute = new Date().getMinutes();
+    const estimatedTravelTime = parseInt(data?.time); // Estimated travel time in minutes
+
+    const targetHour = parseInt(data.hour); // Target hour in 24-hour format (2 PM)
+    const targetMinute = parseInt(data.minute);
+
+    // Calculate the target time in minutes
+    const targetTimeInMinutes = targetHour * 60 + targetMinute;
+
+    // Calculate the departure time in minutes
+    const departureTimeInMinutes = targetTimeInMinutes - estimatedTravelTime;
+
+    // Calculate the departure hour and minute
+    let departureHour = Math.floor(departureTimeInMinutes / 60);
+    let departureMinute = departureTimeInMinutes % 60;
+
+    // Adjust the departure time if it's in the past
+    if (departureHour < currentHour || (departureHour === currentHour && departureMinute <= currentMinute)) {
+      departureHour = currentHour;
+      departureMinute = currentMinute;
+    }
+    const departureHour12 = departureHour > 12 ? departureHour - 12 : departureHour;
+    // Determine the meridiem (am/pm)
+    const meridiem = departureHour >= 12 ? 'pm' : 'am';
+
+    // Format the departure time with leading zeros
+    const formattedDepartureHour = String(departureHour12).padStart(2, '0');
+    const formattedDepartureMinute = String(departureMinute).padStart(2, '0');
+
+    // Construct the departure time string
+    const departureTime = `${formattedDepartureHour}:${formattedDepartureMinute} ${meridiem}`;
+    
     const onClick = async () => {
+      const scheduledTime = new Date();
+      scheduledTime.setHours(departureHour, departureMinute, 0);
         await Notifications.scheduleNotificationAsync({
           content: {
             title: "livefinder",
@@ -33,7 +64,7 @@ const SuccessScreen = ({ route }) => {
             data: { data: "data goes here" }
           },
           trigger: {
-            seconds:1
+            date: scheduledTime
           }
         });
       }
@@ -64,7 +95,7 @@ const SuccessScreen = ({ route }) => {
                     <Text style={tw`text-base text-center`}>Estimated distance: {data?.distance}</Text>
                     {/* <Text style={tw`text-base text-center`}>seconds: {h}</Text> */}
                     {/* <Text style={tw`text-base text-center`}>duration: {d}</Text> */}
-                    <Text style={tw`text-base text-center`}>time to start: {timetostart}</Text>
+                    <Text style={tw`text-base text-center`}>time to start: {departureTime}</Text>
                     <View style={styles.container}>
                         <TouchableOpacity onPress={onClick}>
                             <Text style={{backgroundColor: 'black', padding: 10, color: 'white'}}>Click to notify</Text>

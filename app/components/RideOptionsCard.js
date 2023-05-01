@@ -17,6 +17,7 @@ const RideOptionsCard = () => {
     const [show,setShow]=useState(false);
     const [text,setText]=useState('');
     const [hours,setHour]=useState('');
+    const [minutes,setmin]=useState('');
 
     const onChange=(event,selectedDate)=>{
         const currentDate=selectedDate||date;
@@ -26,8 +27,10 @@ const RideOptionsCard = () => {
         let tempDate=new Date(currentDate);
         let fDate=tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
         let fTime='Hours: '+tempDate.getHours()+' | Minutes: '+tempDate.getMinutes();
-        var hh = new Date();
-        setHour((tempDate-hh)/1000);
+        var hh = tempDate.getHours();
+        var mm = tempDate.getMinutes();
+        setHour(hh);
+        setmin(mm);
         setText(fDate+'\n'+fTime)
     }
     const showMode=(currentMode)=>{
@@ -93,7 +96,7 @@ const RideOptionsCard = () => {
                 <TouchableOpacity
                     style={tailwind`bg-black py-3 m-3 rounded-lg`}
                     onPress={()=>{
-                        navigation.push('SuccessScreen', { data: {distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text, hour: hours} })
+                        navigation.push('SuccessScreen', { data: {distance: travelTimeInformation?.distance?.text, time: travelTimeInformation?.duration.text, hour: hours, minute: minutes} })
                     }}
                 >
                     <Text style={tailwind`text-center text-white text-xl`}>Proceed </Text>

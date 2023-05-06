@@ -22,8 +22,11 @@ const EatsScreen = () => {
     const onChange=(event,selectedDate)=>{
         const currentDate=selectedDate||date;
         setShow(false);
+        if (mode === 'time' && currentDate < new Date()) {
+            alert('Invalid time chosen')
+            return
+          }
         setDate(currentDate);
-
         let tempDate=new Date(currentDate);
         let fDate=tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
         let fTime='Hours: '+tempDate.getHours()+' | Minutes: '+tempDate.getMinutes();
@@ -83,6 +86,7 @@ const EatsScreen = () => {
                         mode={mode}
                         is24Hour={true}
                         display='default'
+                        minimumDate={new Date()}
                         onChange={onChange}
                     />    
                 )}

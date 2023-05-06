@@ -10,6 +10,7 @@ import { Button } from 'react-native-elements'
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 
+
 const RideOptionsCard = () => {
 
     const [date, setDate] = useState(new Date());
@@ -18,10 +19,17 @@ const RideOptionsCard = () => {
     const [text,setText]=useState('');
     const [hours,setHour]=useState('');
     const [minutes,setmin]=useState('');
+    const [isDialogVisible, setIsDialogVisible] = useState(false);
+    const [dialogMessage, setDialogMessage] = useState('');
 
+      
     const onChange=(event,selectedDate)=>{
         const currentDate=selectedDate||date;
         setShow(false);
+        if (mode === 'time' && currentDate < new Date()) {
+            alert('Invalid time chosen')
+            return
+          }
         setDate(currentDate);
 
         let tempDate=new Date(currentDate);
@@ -86,6 +94,7 @@ const RideOptionsCard = () => {
                         mode={mode}
                         is24Hour={true}
                         display='default'
+                        minimumDate={new Date()}
                         onChange={onChange}
                     />    
                 )}
@@ -102,6 +111,7 @@ const RideOptionsCard = () => {
                     <Text style={tailwind`text-center text-white text-xl`}>Proceed </Text>
                 </TouchableOpacity>
             </View>
+
         </Screen>
     )
 }

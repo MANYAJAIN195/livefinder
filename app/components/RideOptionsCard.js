@@ -19,8 +19,6 @@ const RideOptionsCard = () => {
     const [text,setText]=useState('');
     const [hours,setHour]=useState('');
     const [minutes,setmin]=useState('');
-    const [isDialogVisible, setIsDialogVisible] = useState(false);
-    const [dialogMessage, setDialogMessage] = useState('');
 
       
     const onChange=(event,selectedDate)=>{

@@ -6,9 +6,8 @@ import Screen from '../components/Screen'
 import Constants from 'expo-constants'
 import { Icon } from 'react-native-elements'
 import tailwind from 'tailwind-react-native-classnames'
-import { setDestination, setOrigin } from '../redux/slices/navSlice'
-import {RAILWAY_APIKEY, RAILWAY_HOST_APIKEY} from "@env";
-import { selectDestination, selectOrigin } from '../redux/slices/navSlice'
+import {RAILWAY_APIKEY, RAILWAY_HOST_APIKEY, GOOGLE_MAP_APIKEY} from "@env";
+import { selectDestination, selectOrigin,setTravelTimeInformation} from '../redux/slices/navSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Trainlist = ({ route }) => {
@@ -18,6 +17,27 @@ const Trainlist = ({ route }) => {
     const source=data.source;
     const desti=data.destination;
     const [trainData, setTrainData] = useState([]);
+    const [origin,setOri] = useState('NDLS');
+    const [destination,setDest] =useState('');
+    const originn = useSelector(selectOrigin)
+    const destinationn = useSelector(selectDestination)
+
+    useEffect(() =>{
+      if(!originn || !destinationn) navigation.push('EatsScreen')
+      }, [originn, destinationn])
+    
+  
+  const getTravelTime = async () => {
+      const URL = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${originn.description}&destinations=${destinationn.description}&key=${GOOGLE_MAP_APIKEY}`
+      const data = await fetch(URL).then(response => response.json())
+      if(data.status !== 'OK') return alert(data.error_message)
+      dispatch(setTravelTimeInformation(data.rows[0].elements[0]))
+  }
+    useEffect(() => {
+      if(!originn || !destinationn) return;
+      getTravelTime()
+  }, [originn, destinationn, GOOGLE_MAP_APIKEY])
+    
 
     useEffect(() => {
         //getStationOrigin()
@@ -45,7 +65,7 @@ const Trainlist = ({ route }) => {
           const response1 = await fetch(URL1, options);
           const datao = await response1.json();
           console.log(datao.data[0].code);
-          dispatch(setOrigin(datao.data[0].code))
+          setOri(datao.data[0].code)
         } catch (error) {
           console.error(error);
         }
@@ -64,15 +84,12 @@ const Trainlist = ({ route }) => {
           const response = await fetch(URL, options);
           const dataa = await response.json();
           console.log(dataa.data[0].code);
-          dispatch(setDestination(dataa.data[0].code))
+          setDest(dataa.data[0].code)
         } catch (error) {
           console.error(error);
         }
       };  
       
-   /// const origin = useSelector(selectOrigin)
-   const origin = "NDLS";
-    //const destination = useSelector(selectDestination)
     
     const listTrain = async () => {
         //const URL = `https://irctc1.p.rapidapi.com/api/v3/trainBetweenStations?fromStationCode=${origin}&toStationCode=${destination}&dateOfJourney=${data.date}`;
@@ -105,7 +122,7 @@ const Trainlist = ({ route }) => {
      
       const renderItem = ({ item }) => {
         return (
-          <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.push('TrainSuccess', { data: {trainNo: item.train_number, destinationStationCode: origin}})}>
+          <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.push('TrainSuccess', { data: {trainNo: item.train_number, destinationStationCode: origin, trainName: item.train_name}})}>
             
             <Text style={styles.trainName}>{item.train_name}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

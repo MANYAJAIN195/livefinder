@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { StyleSheet,Text, TouchableOpacity, View,TextInput } from 'react-native'
+import { StyleSheet,Text, TouchableOpacity, View } from 'react-native'
 import tw from 'tailwind-react-native-classnames'
 import Screen from '../components/Screen'
 import Constants from 'expo-constants'
@@ -8,6 +8,10 @@ import { Icon } from 'react-native-elements'
 import tailwind from 'tailwind-react-native-classnames'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button } from 'react-native-elements'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
+import {GOOGLE_MAP_APIKEY} from "@env";
+import { setDestination} from '../redux/slices/navSlice'
+import { useDispatch } from 'react-redux'
 
 const EatsScreen = () => {
     const navigation = useNavigation()
@@ -16,8 +20,20 @@ const EatsScreen = () => {
     const [mode,setMode]=useState('date');
     const [show,setShow]=useState(false);
     const [text,setText]=useState('');
-    const [src, onChangesrc] = React.useState('');
-    const [dest, onChangedest] = React.useState('');
+    const dispatch = useDispatch();
+    const [stationoriName, setoriStationName] = useState('');
+    const [stationdesName, setdesStationName] = useState('');
+
+  const extractoriStationName = (address) => {
+    const parts = address.split('Railway')
+  const name = parts[0].trim()
+  setoriStationName(name)
+  };
+  const extractdesStationName = (address) => {
+    const parts = address.split('Railway')
+  const name = parts[0].trim()
+  setdesStationName(name)
+  };
 
     const onChange=(event,selectedDate)=>{
         const currentDate=selectedDate||date;
@@ -56,19 +72,54 @@ const EatsScreen = () => {
             </TouchableOpacity>
             <Text style={tailwind`text-center pb-5 text-xl font-bold`}>Welcome</Text>
             <View style={tailwind`border-t border-gray-100 flex-shrink relative z-20 bg-white`}>
-                
-                <TextInput
-                    style={styles1.input}
-                    placeholder='Source Station Name'
-                    onChangeText={onChangesrc}
-                    value={src}
-                />
-                <TextInput
-                    style={styles1.input}
-                    placeholder='Destination Station Name'
-                    onChangeText={onChangedest}
-                    value={dest}
-                />
+                <View style={tailwind`bg-white pb-2`}>
+                    <GooglePlacesAutocomplete
+                        placeholder='Source Station?'
+                        nearbyPlacesAPI="GooglePlacesSearch"
+                        debounce={400}
+                        onPress={(data, details = null) => {
+                            dispatch(setDestination({
+                                loaction: details.geometry.location,
+                                description: data.description
+                            }));
+                            extractoriStationName(data.description);
+                        }}
+                        minLength={2}
+                        fetchDetails={true}
+                        returnKeyType={"search"}
+                        onFail={error => console.error(error)}
+                        query={{
+                            key: GOOGLE_MAP_APIKEY,
+                            language: 'en',
+                        }}
+                        styles={toInputBoxStyles}
+                        enablePoweredByContainer={false}
+                    />
+                    
+                </View>
+            </View>
+            <View style={tailwind`border-t border-gray-100 flex-shrink relative z-20 bg-white`}>
+                <View style={tailwind`bg-white pb-2`}>
+                    <GooglePlacesAutocomplete
+                        placeholder='Destination Station?'
+                        nearbyPlacesAPI="GooglePlacesSearch"
+                        debounce={400}
+                        onPress={(data, details = null) => {
+                            extractdesStationName(data.description);
+                        }}
+                        minLength={2}
+                        fetchDetails={true}
+                        returnKeyType={"search"}
+                        onFail={error => console.error(error)}
+                        query={{
+                            key: GOOGLE_MAP_APIKEY,
+                            language: 'en',
+                        }}
+                        styles={toInputBoxStyles}
+                        enablePoweredByContainer={false}
+                    />
+                    
+                </View>
             </View>
                 
             <View style={styles.container}>
@@ -95,11 +146,17 @@ const EatsScreen = () => {
             <View style={tailwind`mt-3 flex-row justify-evenly py-3 border-t border-gray-100`}>
                     <TouchableOpacity
                         style={tailwind`flex-row bg-black px-4 py-3 rounded-full border border-black`}
-                        onPress={() => navigation.push('Trainlist', { data: {source: src, destination: dest, date: dateN}})}
+                        onPress={() => navigation.push('Trainlist', { data: {source: stationoriName, destination: stationdesName, date: dateN}})}
                     >
                         
                         <Text style={tailwind`text-white text-center`}>Submit</Text>
                     </TouchableOpacity>
+                    {stationoriName ? (
+                    <Text style={tailwind`mt-3 text-center text-gray-500`}>Station: {stationoriName}</Text>
+                    ) : null}
+                    {stationdesName ? (
+                    <Text style={tailwind`mt-3 text-center text-gray-500`}>Station: {stationdesName}</Text>
+                    ) : null}
             </View>
         </Screen>
     )
@@ -131,14 +188,6 @@ const toInputBoxStyles = StyleSheet.create({
         paddingBottom: 0
     }
 })
-const styles1 = StyleSheet.create({
-    input: {
-      height: 40,
-      margin: 12,
-      borderWidth: 1,
-      padding: 10,
-    },
-  });
 
 
 

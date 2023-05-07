@@ -8,7 +8,9 @@ import tw from 'tailwind-react-native-classnames';
 import * as Notifications from 'expo-notifications';
 import { StatusBar } from 'expo-status-bar';
 import { RAILWAY_APIKEY, RAILWAY_HOST_APIKEY } from "@env";
+import { selectTravelTimeInformation } from '../redux/slices/navSlice'
 import Screen from '../components/Screen';
+import { useSelector } from 'react-redux'
 
 
 Notifications.setNotificationHandler({
@@ -19,12 +21,14 @@ Notifications.setNotificationHandler({
   })
 });
 const TrainSuccess = ({ route }) => {
+  const {data} = route.params;
     const navigation = useNavigation()
-    const {data} = route.params;
     const trainno=data.trainNo;
+    const trainname=data.trainName;
     const [selectedTrainData, setSelectedTrainData] = useState({});
   const [timeToReach, setTimeToReach] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
+  const travelTimeInformation = useSelector(selectTravelTimeInformation)
 
   const onClick = async () => {
       await Notifications.scheduleNotificationAsync({
@@ -85,15 +89,27 @@ useEffect(() => {
   }, [selectedTrainData, data.destinationStationCode]);
 
   const getTimeDifference = () => {
-    if (timeToReach) {
+    if (timeToReach && travelTimeInformation?.duration.text) {
       const [givenHours, givenMinutes] = timeToReach.split(":").map(Number);
       const currentTime = new Date();
       const givenTime = new Date();
       givenTime.setHours(givenHours);
       givenTime.setMinutes(givenMinutes);
-      const timeDifference = givenTime.getTime() - currentTime.getTime();
+  
+      const durationText = travelTimeInformation.duration.text;
+      const durationParts = durationText.split(" ").filter(part => !isNaN(part)).map(Number);
+      let durationHours, durationMinutes;
+      if (durationParts.length === 2) {
+        [durationHours, durationMinutes] = durationParts;
+      } else {
+        durationMinutes = durationParts[0];
+        durationHours = 0;
+      }
+  
+      const timeDifference = givenTime.getTime() - currentTime.getTime() - durationHours * (1000 * 60 * 60) - durationMinutes * (1000 * 60);
       const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
       const minutesDifference = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  
       return { hoursDifference, minutesDifference };
     }
     return null;
@@ -101,11 +117,28 @@ useEffect(() => {
 
   const renderEstimatedArrivalTime = () => {
     if (timeToReach) {
-      const { hoursDifference, minutesDifference } = getTimeDifference();
+      const { hoursDifference, minutesDifference} = getTimeDifference();
+      const [departureHour, departureMinute] = timeToReach.split(":").map(Number);
+      const departureHour12 = departureHour > 12 ? departureHour - 12 : departureHour;
+      const meridiem = departureHour >= 12 ? 'pm' : 'am';
+      const formattedDepartureHour = String(departureHour12).padStart(2, '0');
+      const formattedDepartureMinute = String(departureMinute).padStart(2, '0');
+      const departureTime = `${formattedDepartureHour}:${formattedDepartureMinute} ${meridiem}`;
+      const now = new Date();
+      now.setHours(now.getHours() + hoursDifference);
+      now.setMinutes(now.getMinutes() + minutesDifference);
+      const arrivalHour = now.getHours() > 12 ? now.getHours() - 12 : now.getHours();
+      const arrivalMinute = now.getMinutes();
+      const arrivalMeridiem = now.getHours() >= 12 ? 'pm' : 'am';
+      const formattedArrivalHour = String(arrivalHour).padStart(2, '0');
+      const formattedArrivalMinute = String(arrivalMinute).padStart(2, '0');
+      const arrivalTime = `${formattedArrivalHour}:${formattedArrivalMinute} ${arrivalMeridiem}`;
       return (
         <Text style={tw`text-base text-center`}>
-          Estimated arrival time at {destinationStation.station_name}: {timeToReach} pm{"\n"}
-          After {hoursDifference < 0 && minutesDifference < 0 ? 0 : hoursDifference} hours and {minutesDifference < 0 && hoursDifference < 0 ? 0 : minutesDifference} minutes from current time //not required might remove later
+          Distance from your loaction to {destinationStation.station_name} Railway Station: {travelTimeInformation?.distance?.text}{"\n"}
+          Time to reach {destinationStation.station_name} Railway Station by road:{travelTimeInformation?.duration.text}{"\n"}
+          Train arrival time at {destinationStation.station_name} Railway Station: {departureTime}{"\n"}
+          Leave at {arrivalTime} from your home
 </Text>
       );
     }
@@ -136,7 +169,7 @@ useEffect(() => {
                     />
             </View>
             <View style={tw`p-5 text-center self-center`}>
-                    <Text style={tw`font-bold text-lg mb-3 text-center`}>selected train: {trainno}</Text>
+                    <Text style={tw`font-bold text-lg mb-3 text-center`}>selected train: {trainname}</Text>
                 {renderEstimatedArrivalTime()}
             </View>
             <View style={styles.container}>

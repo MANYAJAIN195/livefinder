@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import tailwind from 'tailwind-react-native-classnames'
 import Screen from './Screen'
@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native'
 const NavigateCard = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
-    
+
      
 
     return (

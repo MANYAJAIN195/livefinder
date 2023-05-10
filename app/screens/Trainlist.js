@@ -17,11 +17,11 @@ const Trainlist = ({ route }) => {
     const source=data.source;
     const desti=data.destination;
     const [trainData, setTrainData] = useState([]);
-    const [origin,setOri] = useState('');
-    const [destination,setDest] =useState('');
+    const [origin,setOri] = useState('NDLS');
+    const [destination,setDest] =useState('NZM');
     const originn = useSelector(selectOrigin)
     const destinationn = useSelector(selectDestination)
-    const RAILWAY_APIKEY= 'c20d40fb8dmshf370d4bbc01f9e5p1107edjsn35a3298fe1a2';
+    const RAILWAY_APIKEY= '6a3143335emsh9b60e9e009f62b5p1dc397jsnc08c5e2cdb2d';
     useEffect(() =>{
       if(!originn || !destinationn) navigation.push('EatsScreen')
       }, [originn, destinationn])
@@ -40,14 +40,14 @@ const Trainlist = ({ route }) => {
     
 
     useEffect(() => {
-        getStationOrigin()
+        //getStationOrigin()
         
     }, [source, desti, RAILWAY_APIKEY, RAILWAY_HOST_APIKEY])
 
     useEffect(() => {
       const timer = setTimeout(() => {
         console.log('This will run after 2 second!')
-        getStationDest()
+        //getStationDest()
       }, 2000);
       return () => clearTimeout(timer);
     }, [source, desti, RAILWAY_APIKEY, RAILWAY_HOST_APIKEY]);

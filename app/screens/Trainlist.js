@@ -18,10 +18,10 @@ const Trainlist = ({ route }) => {
     const desti=data.destination;
     const [trainData, setTrainData] = useState([]);
     const [origin,setOri] = useState('NDLS');
-    const [destination,setDest] =useState('NZM');
+    const [destination,setDest] =useState('GWL');
     const originn = useSelector(selectOrigin)
     const destinationn = useSelector(selectDestination)
-    const RAILWAY_APIKEY= '6a3143335emsh9b60e9e009f62b5p1dc397jsnc08c5e2cdb2d';
+    const RAILWAY_APIKEY= '6f21b1aad7msh53338a8b9bca423p1d2253jsn9c662a52ea08';
     useEffect(() =>{
       if(!originn || !destinationn) navigation.push('EatsScreen')
       }, [originn, destinationn])

@@ -6,16 +6,16 @@ Roadways Tracking: Integrated real-time traffic data from Google API's distance 
 Railways Tracking: Integrated with Roadways Tracking, providing real-time train arrival and departure information for various train stations. Push notifications informed users of the optimal time to leave home, ensuring timely arrivals.
 
 <p float="left">
-  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/c042fee8-a836-495c-8b4b-22eedd62304c" width="30%" />
-  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/92be6cd9-f8cd-493d-b351-ea2aa7188bf8" width="30%" />
-  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/31295fcc-61e3-4fd9-bd7b-fd951f6bbabc" width="30%" />
+  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/7198aac2-86b8-4973-8238-da70f594812d" width="30%" />
+  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/376d5906-e323-4896-8d1d-182f5199cf8c" width="30%" />
+  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/f06b535f-636d-417b-b3a9-c4d243c6cd16" width="30%" />
 </p>
 <p float="left">
-  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/569adc96-47a2-4c86-94eb-d311bf4aa05c" width="30%" />
-  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/14c1df5a-f27d-4ba2-a90b-105a65d10725" width="30%" />
-  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/9abb2f94-be4d-4150-9e4f-b3d04d563d1f" width="30%" />
+  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/e672cde7-1f40-4af7-adec-cbcabbd1ca2c" width="30%" />
+  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/32cb1e45-a304-485e-82c2-31fccdaab21a" width="30%" />
+  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/2ffd3f7e-edf1-4067-915a-a62d03d1d832" width="30%" />
 </p>
 <p float="left">
-  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/c4afa71a-03e1-43df-a607-29cf478c289d" width="30%" />
-  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/fa3dd53d-e1f0-4304-9736-4abcd3dbd7c5" width="30%" />
+  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/e103955c-9af5-4400-bd16-78a4a82354e4" width="30%" />
+  <img src="https://github.com/MANYAJAIN195/livefinder/assets/71972339/55203869-b3ca-43df-a966-f328b3d7fbb2" width="30%" />
 </p>

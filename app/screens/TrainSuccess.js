@@ -29,7 +29,6 @@ const TrainSuccess = ({ route }) => {
   const [timeToReach, setTimeToReach] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
   const travelTimeInformation = useSelector(selectTravelTimeInformation)
-  const RAILWAY_APIKEY= '6f21b1aad7msh53338a8b9bca423p1d2253jsn9c662a52ea08';
 
   const onClick = async () => {
       await Notifications.scheduleNotificationAsync({

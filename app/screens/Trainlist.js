@@ -21,7 +21,7 @@ const Trainlist = ({ route }) => {
     const [destination,setDest] =useState('GWL');
     const originn = useSelector(selectOrigin)
     const destinationn = useSelector(selectDestination)
-    const RAILWAY_APIKEY= '6f21b1aad7msh53338a8b9bca423p1d2253jsn9c662a52ea08';
+    
     useEffect(() =>{
       if(!originn || !destinationn) navigation.push('EatsScreen')
       }, [originn, destinationn])
